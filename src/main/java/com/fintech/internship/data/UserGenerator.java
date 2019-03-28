@@ -33,25 +33,19 @@ public class UserGenerator {
             if (genderFlag) {
                 randomGender = "М";
                 randomFirstName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("NamesMale.txt"))));
+                        "src/main/resources/NamesMale.txt"));
                 randomSecondName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SecNamesMale.txt"))));
+                        "src/main/resources/SecNamesMale.txt"));
                 randomLastName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SurnamesMale.txt"))));
+                        "src/main/resources/SurnamesMale.txt"));
             } else {
                 randomGender = "Ж";
                 randomFirstName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("NamesFem.txt"))));
+                        "src/main/resources/NamesFem.txt"));
                 randomSecondName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SecNamesFem.txt"))));
+                        "src/main/resources/SecNamesFem.txt"));
                 randomLastName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SurnamesFem.txt"))));
+                        "src/main/resources/SurnamesFem.txt"));
             }
 
             try {
@@ -65,17 +59,13 @@ public class UserGenerator {
                 newUser.setiNN(new RandomINN().getRandomINN());
                 newUser.setZipcode(new RandomNumberGenerator().getRandomNumber());
                 newUser.setCountry(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Countries.txt")))));
+                        "src/main/resources/Countries.txt")));
                 newUser.setArea(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Areas.txt")))));
+                        "src/main/resources/Areas.txt")));
                 newUser.setCity(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Cities.txt")))));
+                        "src/main/resources/Cities.txt")));
                 newUser.setStreet(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Streets.txt")))));
+                        "src/main/resources/Streets.txt")));
                 newUser.setHouse(new RandomNumberGenerator().getRandomNumber(1, 199));
                 newUser.setFlat(new RandomNumberGenerator().getRandomNumber(1, 999));
                 users.add(newUser);

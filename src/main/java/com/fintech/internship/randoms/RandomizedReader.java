@@ -22,6 +22,5 @@ public class RandomizedReader {
         } catch (IOException e) {
             return "";
         }
-
     }
 }
