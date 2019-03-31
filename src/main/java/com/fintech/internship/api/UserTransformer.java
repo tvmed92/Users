@@ -15,7 +15,7 @@ public class UserTransformer implements JsonDeserialiser <User>{
         JsonObject jsonObject = json.getAsJsonObject();
         User user = new User();
         user.setGender(jsonObject.get("gender").getAsString());
-        String nameAsString = jsonObject.get("name").getAsString();
+        user.setFirstName(jsonObject.get("name").get("first").getAsString();
 
 //        user.setFirstName(
 
