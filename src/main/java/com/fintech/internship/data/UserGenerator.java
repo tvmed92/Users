@@ -6,18 +6,20 @@ import com.fintech.internship.randoms.RandomNumberGenerator;
 import com.fintech.internship.randoms.RandomizedReader;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UserGenerator {
 
     private List<User> users = new ArrayList<>();
-    private RandomizedReader rReader = new RandomizedReader();
+    private final RandomizedReader rReader = new RandomizedReader();
+    private final RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
 
-    public List<User> fillUsers(int upperLimit) throws FileNotFoundException {
+    public List<User> fillUsers(int upperLimit) {
         int limit = ThreadLocalRandom.current().nextInt(1, upperLimit);
 
         for (int j = 1; j <= limit; j++) {
@@ -32,57 +34,38 @@ public class UserGenerator {
 
             if (genderFlag) {
                 randomGender = "М";
-                randomFirstName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("NamesMale.txt"))));
-                randomSecondName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SecNamesMale.txt"))));
-                randomLastName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SurnamesMale.txt"))));
+                randomFirstName = getRandomFromFile("NamesMale.txt");
+                randomSecondName = getRandomFromFile("SecNamesMale.txt");
+                randomLastName = getRandomFromFile("SurnamesMale.txt");
             } else {
                 randomGender = "Ж";
-                randomFirstName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("NamesFem.txt"))));
-                randomSecondName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SecNamesFem.txt"))));
-                randomLastName = rReader.generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("SurnamesFem.txt"))));
+                randomFirstName = getRandomFromFile("NamesFem.txt");
+                randomSecondName = getRandomFromFile("SecNamesFem.txt");
+                randomLastName = getRandomFromFile("SurnamesFem.txt");
             }
 
-            try {
-                User newUser = new User();
-                newUser.setFirstName(randomFirstName);
-                newUser.setSecondName(randomSecondName);
-                newUser.setLastName(randomLastName);
-                newUser.setAge(randomDateOfBirth.getAge());
-                newUser.setGender(randomGender);
-                newUser.setDateOfBirth(randomDateOfBirth.getDateTime());
-                newUser.setiNN(new RandomINN().getRandomINN());
-                newUser.setZipcode(new RandomNumberGenerator().getRandomNumber());
-                newUser.setCountry(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Countries.txt")))));
-                newUser.setArea(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Areas.txt")))));
-                newUser.setCity(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Cities.txt")))));
-                newUser.setStreet(new RandomizedReader().generate(new FileReader(
-                        String.valueOf(getClass().getClassLoader()
-                                .getResource("Streets.txt")))));
-                newUser.setHouse(new RandomNumberGenerator().getRandomNumber(1, 199));
-                newUser.setFlat(new RandomNumberGenerator().getRandomNumber(1, 999));
-                users.add(newUser);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            User newUser = new User();
+            newUser.setFirstName(randomFirstName);
+            newUser.setSecondName(randomSecondName);
+            newUser.setLastName(randomLastName);
+            newUser.setAge(randomDateOfBirth.getAge());
+            newUser.setGender(randomGender);
+            newUser.setDateOfBirth(randomDateOfBirth.getDateTime());
+            newUser.setiNN(new RandomINN().getRandomINN());
+            newUser.setZipcode(randomNumberGenerator.getRandomNumber());
+            newUser.setCountry(getRandomFromFile("Countries.txt"));
+            newUser.setArea(getRandomFromFile("Areas.txt"));
+            newUser.setCity(getRandomFromFile("Cities.txt"));
+            newUser.setStreet(getRandomFromFile("Streets.txt"));
+            newUser.setHouse(randomNumberGenerator.getRandomNumber(1, 199));
+            newUser.setFlat(randomNumberGenerator.getRandomNumber(1, 999));
+            users.add(newUser);
         }
         return users;
+    }
+
+    private String getRandomFromFile(String fileName) {
+        return Optional.of(rReader.generate(new InputStreamReader(
+                getClass().getClassLoader().getResourceAsStream(fileName)))).orElse("");
     }
 }

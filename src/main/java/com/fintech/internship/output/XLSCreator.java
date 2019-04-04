@@ -7,8 +7,9 @@ import org.apache.poi.ss.usermodel.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.List;
+
+import static com.fintech.internship.data.ConstantsUtil.DATE_FORMAT;
 
 public class XLSCreator {
 
@@ -52,8 +53,6 @@ public class XLSCreator {
 
     private void setContent(List<User> users) {
 
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-
         int rowNum = 1;
         for (User user : users) {
             Row row = sheet.createRow(rowNum++);
@@ -64,7 +63,7 @@ public class XLSCreator {
             row.createCell(4).setCellValue(user.getGender());
 
             Cell dateOfBirthCell = row.createCell(5);
-            dateOfBirthCell.setCellValue(format.format(user.getDateOfBirth()));
+            dateOfBirthCell.setCellValue(DATE_FORMAT.format(user.getDateOfBirth()));
 
             row.createCell(6).setCellValue(user.getiNN());
             row.createCell(7).setCellValue(user.getZipcode());

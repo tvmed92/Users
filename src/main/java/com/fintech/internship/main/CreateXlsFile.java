@@ -1,25 +1,30 @@
 package com.fintech.internship.main;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fintech.internship.api.UserClient;
+import com.fintech.internship.api.UsersContainer;
 import com.fintech.internship.data.User;
 import com.fintech.internship.data.UserGenerator;
 import com.fintech.internship.output.CreatePDF;
 import com.fintech.internship.output.XLSCreator;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static com.fintech.internship.data.ConstantsUtil.*;
+
 public class CreateXlsFile {
 
-    private static String[] columns = {"Имя", "Отчество", "Фамилия", "Возраст",
-            "Пол", "Дата рождения", "ИНН", "Почтовый индекс", "Страна",
-            "Область", "Город", "Улица", "Дом", "Квартира"};
-
-    public static void main(String[] args) {
-        List<User> users = null;
+    public static void main(String[] args) throws IOException {
+        List<User> users;
         try {
-            users = new UserGenerator().fillUsers(30);
+            ObjectMapper mapper = new ObjectMapper();
+            String getResponse = new UserClient().doGetRequest(RANDOM_USER_URL, USER_GENERATION_LIMIT);
+            UsersContainer responseContainer = mapper.readValue(getResponse, UsersContainer.class);
+            users = responseContainer.getResults();
         } catch (IOException e) {
-            e.printStackTrace();
+            users = new UserGenerator().fillUsers(USER_GENERATION_LIMIT);
         }
         new XLSCreator(columns).populateAndWriteToXLS(users, "Users.xls");
 
