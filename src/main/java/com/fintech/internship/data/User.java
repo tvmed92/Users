@@ -103,9 +103,7 @@ public class User {
         this.age = age;
     }
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+    public void setGender(String gender) { this.gender = gender; }
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;

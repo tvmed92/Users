@@ -28,8 +28,8 @@ public class UserGenerator {
             String randomFirstName;
             String randomSecondName;
             String randomLastName;
-
             RandomDateOfBirth randomDateOfBirth = new RandomDateOfBirth();
+
             boolean genderFlag = new Random().nextBoolean();
 
             if (genderFlag) {

@@ -8,6 +8,6 @@ public class ConstantsUtil {
             "Область", "Город", "Улица", "Дом", "Квартира"};
 
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
-    public static final String RANDOM_USER_URL = "https://randomuser.me/api/?nat=us&results=%d";
+    public static final String RANDOM_USER_URL = "https://randomuser.me/api/?nat=us,au,br,ch,de,fr&results=%d";
     public static final int USER_GENERATION_LIMIT = 30;
 }
