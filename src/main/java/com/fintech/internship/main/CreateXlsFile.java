@@ -24,6 +24,7 @@ public class CreateXlsFile {
             UsersContainer responseContainer = mapper.readValue(getResponse, UsersContainer.class);
             users = responseContainer.getResults();
         } catch (IOException e) {
+            System.out.println("Отсутствует подключение к интернету, данные пользователей будут сгенерированы из ресурсов");
             users = new UserGenerator().fillUsers(USER_GENERATION_LIMIT);
         }
         new XLSCreator(columns).populateAndWriteToXLS(users, "Users.xls");
