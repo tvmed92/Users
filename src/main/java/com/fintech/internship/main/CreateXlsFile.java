@@ -16,7 +16,7 @@ import static com.fintech.internship.data.ConstantsUtil.*;
 
 public class CreateXlsFile {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         List<User> users;
         try {
             ObjectMapper mapper = new ObjectMapper();

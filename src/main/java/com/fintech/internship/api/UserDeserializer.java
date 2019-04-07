@@ -16,8 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.Optional;
 
 public class UserDeserializer extends StdDeserializer<User> {
-    public UserDeserializer() { this(null); }
-    protected UserDeserializer(Class<?> vc) { super(vc); }
+    public UserDeserializer() {
+        this(null);
+    }
+
+    protected UserDeserializer(Class<?> vc) {
+        super(vc);
+    }
 
     SimpleDateFormat jsonDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
@@ -29,10 +34,8 @@ public class UserDeserializer extends StdDeserializer<User> {
         JsonNode rootNode = jsonParser.getCodec().readTree(jsonParser);
         User user = new User();
         user.setFirstName(rootNode.get("name").get("first").asText());
-//        user.setSecondName("");
         user.setLastName(rootNode.get("name").get("last").asText());
         user.setAge(rootNode.get("dob").get("age").asInt());
-        user.setGender(rootNode.get("gender").asText());
         user.setiNN(new RandomINN().getRandomINN());
         user.setZipcode(randomNumberGenerator.getRandomNumber());
         user.setCountry(getRandomFromFile("Countries.txt"));
@@ -42,12 +45,15 @@ public class UserDeserializer extends StdDeserializer<User> {
         user.setHouse(randomNumberGenerator.getRandomNumber(1, 199));
         user.setFlat(randomNumberGenerator.getRandomNumber(1, 999));
 
-//        if(genderFlagApi) {
-//            genderFlagApi = "male";
-//            user.setSecondName(getRandomFromFile("SecNamesMale.txt"));
-//        } else {
-//            user.setSecondName(getRandomFromFile("SecNamesFem.txt"));
-//        }
+        String genderFromApi = rootNode.get("gender").asText();
+
+        if (genderFromApi.equals("male")) {
+            user.setSecondName(getRandomFromFile("SecNamesMale.txt"));
+            user.setGender("М");
+        } else {
+            user.setSecondName(getRandomFromFile("SecNamesFem.txt"));
+            user.setGender("Ж");
+        }
 
         try {
             user.setDateOfBirth(jsonDateFormat.parse(rootNode.get("dob").get("date").asText()));

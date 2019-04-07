@@ -21,8 +21,7 @@ public class RandomizedReader {
             int randomWordNumber = (int) (Math.random() * words.size());
             return words.get(randomWordNumber);
         } catch (IOException e) {
-            return "";
+            return "cannot read the file";
         }
-
     }
 }

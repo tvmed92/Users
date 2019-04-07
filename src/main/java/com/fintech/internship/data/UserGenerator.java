@@ -5,7 +5,6 @@ import com.fintech.internship.randoms.RandomINN;
 import com.fintech.internship.randoms.RandomNumberGenerator;
 import com.fintech.internship.randoms.RandomizedReader;
 
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +58,7 @@ public class UserGenerator {
             newUser.setStreet(getRandomFromFile("Streets.txt"));
             newUser.setHouse(randomNumberGenerator.getRandomNumber(1, 199));
             newUser.setFlat(randomNumberGenerator.getRandomNumber(1, 999));
+
             users.add(newUser);
         }
         return users;

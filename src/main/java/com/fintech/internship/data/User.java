@@ -1,12 +1,10 @@
 package com.fintech.internship.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fintech.internship.api.UserDeserializer;
 
 import java.util.Date;
-import java.util.List;
 
 @JsonDeserialize(using = UserDeserializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,13 +25,6 @@ public class User {
     private Integer house;
     private Integer flat;
 
-
-    private List<String> nameNode;
-
-    @JsonSetter("name")
-    public List<String> getNameNode() {return nameNode;}
-
-    public void setNameNode(List<String> nameNode) { this.nameNode = nameNode; }
 
     public String getFirstName() {
         return firstName;
@@ -79,7 +70,9 @@ public class User {
         return city;
     }
 
-    public String getStreet() { return street; }
+    public String getStreet() {
+        return street;
+    }
 
     public Integer getHouse() {
         return house;
@@ -89,7 +82,9 @@ public class User {
         return flat;
     }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
     public void setSecondName(String secondName) {
         this.secondName = secondName;
@@ -103,7 +98,9 @@ public class User {
         this.age = age;
     }
 
-    public void setGender(String gender) { this.gender = gender; }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
@@ -113,7 +110,9 @@ public class User {
         this.iNN = iNN;
     }
 
-    public void setZipcode(Integer zipcode) { this.zipcode = zipcode; }
+    public void setZipcode(Integer zipcode) {
+        this.zipcode = zipcode;
+    }
 
     public void setCountry(String country) {
         this.country = country;
@@ -138,7 +137,6 @@ public class User {
     public void setFlat(Integer flat) {
         this.flat = flat;
     }
-
 
 
     public User() {
