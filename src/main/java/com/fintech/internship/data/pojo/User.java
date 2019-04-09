@@ -1,8 +1,8 @@
-package com.fintech.internship.data;
+package com.fintech.internship.data.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fintech.internship.api.UserDeserializer;
+import com.fintech.internship.data.api.UserDeserializer;
 
 import java.util.Date;
 

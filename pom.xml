@@ -87,7 +87,7 @@
                     <appendAssemblyId>false</appendAssemblyId>
                     <archive>
                         <manifest>
-                            <mainClass>com.fintech.internship.main.CreateXlsFile</mainClass>
+                            <mainClass>com.fintech.internship.UsersFilesWriter</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

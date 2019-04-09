@@ -1,7 +1,7 @@
-package com.fintech.internship.api;
+package com.fintech.internship.data.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fintech.internship.data.User;
+import com.fintech.internship.data.pojo.User;
 
 import java.util.List;
 

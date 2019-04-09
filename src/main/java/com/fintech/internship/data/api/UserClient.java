@@ -1,4 +1,4 @@
-package com.fintech.internship.api;
+package com.fintech.internship.data.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

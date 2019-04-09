@@ -1,11 +1,11 @@
-package com.fintech.internship.main;
+package com.fintech.internship;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fintech.internship.api.UserClient;
-import com.fintech.internship.api.UsersContainer;
-import com.fintech.internship.data.User;
-import com.fintech.internship.data.UserGenerator;
-import com.fintech.internship.output.CreatePDF;
+import com.fintech.internship.data.api.UserClient;
+import com.fintech.internship.data.api.UsersContainer;
+import com.fintech.internship.data.pojo.User;
+import com.fintech.internship.data.pojo.UserGenerator;
+import com.fintech.internship.output.PDFCreator;
 import com.fintech.internship.output.XLSCreator;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.List;
 
 import static com.fintech.internship.data.ConstantsUtil.*;
 
-public class CreateXlsFile {
+public class UsersFilesWriter {
 
     public static void main(String[] args) {
         List<User> users;
@@ -30,7 +30,7 @@ public class CreateXlsFile {
         new XLSCreator(columns).populateAndWriteToXLS(users, "Users.xls");
 
         File file = new File("Users.pdf");
-        new CreatePDF(users).createFile(file.getAbsolutePath());
+        new PDFCreator(users).createFile(file.getAbsolutePath());
         System.out.println("Файл создан. Путь: " + file.getAbsolutePath());
     }
 }

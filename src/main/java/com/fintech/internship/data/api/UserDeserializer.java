@@ -1,10 +1,10 @@
-package com.fintech.internship.api;
+package com.fintech.internship.data.api;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fintech.internship.data.User;
+import com.fintech.internship.data.pojo.User;
 import com.fintech.internship.randoms.RandomINN;
 import com.fintech.internship.randoms.RandomNumberGenerator;
 import com.fintech.internship.randoms.RandomizedReader;

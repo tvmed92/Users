@@ -1,5 +1,6 @@
-package com.fintech.internship.data;
+package com.fintech.internship.data.pojo;
 
+import com.fintech.internship.data.pojo.User;
 import com.fintech.internship.randoms.RandomDateOfBirth;
 import com.fintech.internship.randoms.RandomINN;
 import com.fintech.internship.randoms.RandomNumberGenerator;

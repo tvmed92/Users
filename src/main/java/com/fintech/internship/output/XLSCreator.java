@@ -1,6 +1,6 @@
 package com.fintech.internship.output;
 
-import com.fintech.internship.data.User;
+import com.fintech.internship.data.pojo.User;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 

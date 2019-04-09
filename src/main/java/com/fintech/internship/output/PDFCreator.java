@@ -1,6 +1,6 @@
 package com.fintech.internship.output;
 
-import com.fintech.internship.data.User;
+import com.fintech.internship.data.pojo.User;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 import static com.fintech.internship.data.ConstantsUtil.columns;
 
-public class CreatePDF {
+public class PDFCreator {
 
     private List<User> users;
     private Format format;
@@ -24,7 +24,7 @@ public class CreatePDF {
     private Font cellFont;
     private PdfPTable table;
 
-    public CreatePDF(List<User> userList) {
+    public PDFCreator(List<User> userList) {
         this.users = userList;
         this.format = new SimpleDateFormat("dd-MM-yyyy");
     }
