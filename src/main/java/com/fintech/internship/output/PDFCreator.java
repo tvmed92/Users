@@ -14,7 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.fintech.internship.data.ConstantsUtil.columns;
+import static com.fintech.internship.data.helpers.ConstantsUtil.columns;
 
 public class PDFCreator {
 
@@ -32,8 +32,9 @@ public class PDFCreator {
 
     private void setFont() throws IOException, DocumentException {
         BaseFont baseFont;
-        baseFont = BaseFont.createFont(
-                "src/main/resources/InconsolataCyr.ttf",
+        baseFont = BaseFont.createFont(this.getClass()
+                        .getClassLoader()
+                        .getResource("InconsolataCyr.ttf").getPath(),
                 BaseFont.IDENTITY_H,
                 BaseFont.EMBEDDED);
         headerFont = new Font(baseFont, 12, Font.NORMAL);

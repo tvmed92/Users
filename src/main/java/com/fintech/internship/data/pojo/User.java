@@ -141,24 +141,4 @@ public class User {
 
     public User() {
     }
-
-    public User(String firstName, String secondName, String lastName,
-                Integer age, String gender, Date dateOfBirth, String iNN,
-                Integer zipcode, String country, String area,
-                String city, String street, Integer house, Integer flat) {
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.lastName = lastName;
-        this.age = age;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.iNN = iNN;
-        this.zipcode = zipcode;
-        this.country = country;
-        this.area = area;
-        this.city = city;
-        this.street = street;
-        this.house = house;
-        this.flat = flat;
-    }
 }

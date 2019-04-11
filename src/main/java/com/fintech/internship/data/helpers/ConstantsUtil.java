@@ -1,4 +1,4 @@
-package com.fintech.internship.data;
+package com.fintech.internship.data.helpers;
 
 import java.text.SimpleDateFormat;
 

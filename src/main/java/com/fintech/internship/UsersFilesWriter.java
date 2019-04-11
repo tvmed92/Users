@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static com.fintech.internship.data.ConstantsUtil.*;
+import static com.fintech.internship.data.helpers.ConstantsUtil.*;
 
 public class UsersFilesWriter {
 
@@ -22,6 +22,7 @@ public class UsersFilesWriter {
             ObjectMapper mapper = new ObjectMapper();
             String getResponse = new UserClient().doGetRequest(RANDOM_USER_URL, USER_GENERATION_LIMIT);
             UsersContainer responseContainer = mapper.readValue(getResponse, UsersContainer.class);
+            System.out.println("Данные пользователей будут сгенерированы из приложения randomuser.me");
             users = responseContainer.getResults();
         } catch (IOException e) {
             System.out.println("Отсутствует подключение к интернету, данные пользователей будут сгенерированы из ресурсов");
