@@ -8,7 +8,10 @@ public class UserServices {
 
     private static IUserDB userDB = new UserDB();
 
-    public static void addUserToDB(User user) {
+
+    // покрашился метод
+
+    public static void addUserToDB(List<User> user) {
         if (user != null) {
             userDB.addUserToDB(user);
         }

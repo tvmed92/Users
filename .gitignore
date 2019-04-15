@@ -1,3 +1,4 @@
 *.xls
 *.pdf
 .idea
+dbProperties.txt
