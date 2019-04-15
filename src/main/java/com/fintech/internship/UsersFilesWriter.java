@@ -24,9 +24,14 @@ public class UsersFilesWriter {
             UsersContainer responseContainer = mapper.readValue(getResponse, UsersContainer.class);
             System.out.println("Данные пользователей будут сгенерированы из приложения randomuser.me");
             users = responseContainer.getResults();
+//            UserServices.addUserToDB(users);
         } catch (IOException e) {
-            System.out.println("Отсутствует подключение к интернету, данные пользователей будут сгенерированы из ресурсов");
+            System.out.println("Отсутствует подключение к интернету, данные пользователей будут получены из Базы данных");
+//            users = UserServices.getUsersFromDB();
+//            if (users.isEmpty()) {
+//                System.out.println("База данных пуста, данные пользователей будут сгенерированы из ресурсов");
             users = new UserGenerator().fillUsers(USER_GENERATION_LIMIT);
+//            }
         }
         new XLSCreator(columns).populateAndWriteToXLS(users, "Users.xls");
 
