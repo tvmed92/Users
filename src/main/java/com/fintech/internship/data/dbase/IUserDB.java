@@ -8,10 +8,14 @@ public interface IUserDB {
 
     List<User> getUsersFromDB();
 
-    void addUserToDB(User user);
+    void addUser(User user);
+
+    void addAddress(User user);
 
     boolean updateUser(User user);
 
-    User getUserByName(String name);
+    boolean updateAddress(User user);
+
+    User getUserByName(String first_name, String second_name, String last_name);
 
 }

@@ -1,5 +1,5 @@
 instance=jdbc:mysql://localhost:3306
 
-user=root
+user=admin
 
-password=root
+password=admin

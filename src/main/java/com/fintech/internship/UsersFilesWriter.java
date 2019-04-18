@@ -3,6 +3,7 @@ package com.fintech.internship;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fintech.internship.data.api.UserClient;
 import com.fintech.internship.data.api.UsersContainer;
+import com.fintech.internship.data.dbase.UserDB;
 import com.fintech.internship.data.dbase.UserServices;
 import com.fintech.internship.data.pojo.User;
 import com.fintech.internship.data.pojo.UserGenerator;
@@ -26,7 +27,7 @@ public class UsersFilesWriter {
             System.out.println("Данные пользователей будут сгенерированы из приложения randomuser.me");
             users = responseContainer.getResults();
 
-            UserServices.addUserToDB(users); //тут все норм, но метод в UserServices покрашился
+            UserServices.addUserToDB(users); //короче, не хочет он вызываться сюда
 
         } catch (IOException e) {
             System.out.println("Отсутствует подключение к интернету, данные пользователей будут получены из Базы данных");

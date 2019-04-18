@@ -2,6 +2,7 @@ package com.fintech.internship.data.dbase;
 
 import com.fintech.internship.data.pojo.User;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserServices {
@@ -9,11 +10,28 @@ public class UserServices {
     private static IUserDB userDB = new UserDB();
 
 
-    // покрашился метод
+    public void addUsersToDB (List<User> users){
+        for (User user : users){
+            List<User> usersByFNSNandP = Collections.singletonList(getUserByName(user.getFirstName(), user.getSecondName(), user.getLastName()));
+            if(usersByFNSNandP.isEmpty()){
+                addUser(user);
+                addAddress(user);
+            }else {
+                updateUser(user);
+                updateAddress(user);
+            }
+        }
+    }
 
-    public static void addUserToDB(List<User> user) {
+    public static void addUser(User user) {
         if (user != null) {
-            userDB.addUserToDB(user);
+            userDB.addUser(user);
+        }
+    }
+
+    public static void addAddress(User user) {
+        if (user != null) {
+            userDB.addAddress(user);
         }
     }
 
@@ -23,7 +41,13 @@ public class UserServices {
         }
     }
 
+    public static void updateAddress(User user) {
+        if (user != null) {
+            userDB.updateAddress(user);
+        }
+    }
+
     public static List<User> getUsersFromDB() { return userDB.getUsersFromDB(); }
 
-    public static User getUserByName(String name) { return userDB.getUserByName(name); }
+    public static User getUserByName(String firstName, String secondName, String lastName, String name) { return userDB.getUserByName(name); }
 }
