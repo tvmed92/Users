@@ -8,6 +8,8 @@ public interface IUserDB {
 
     List<User> getUsersFromDB();
 
+    void addUsersToDB(List<User> users);
+
     void addUser(User user);
 
     void addAddress(User user);

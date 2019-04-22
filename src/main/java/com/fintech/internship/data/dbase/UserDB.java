@@ -7,33 +7,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
 public class UserDB implements IUserDB {
 
-    static Connection getConnection() throws IOException {
+    static Connection getConnection() throws IOException, SQLException {
 
-        Properties dbProperties = new Properties();
-        dbProperties.load(UserDB.class.getResourceAsStream("dbProperties"));
+//        Properties dbProperties = new Properties();
+////        dbProperties.load(UserDB.class.getResourceAsStream("dbProperties"));
 
-        // не уверена, что правильно коннекшн сделала, но надо именно вот так - через файл
-        try {DriverManager.getConnection(dbProperties.getProperty("instance"), dbProperties);
-        } catch (SQLException e) {
-            e.getMessage();
-        }
-        return getConnection();
+        String url = "jdbc:mysql:tcp://localhost:3306";
+//        try {
+//            Connection connection = DriverManager.getConnection(url, "admin", "admin");
+//            DriverManager.getConnection(dbProperties.getProperty("instance"), dbProperties);
+//        } catch (SQLException e) {
+//            e.getMessage();
+//        }
+        return DriverManager.getConnection(url, "admin", "admin");
     }
 
+    @Override
     public List<User> getUsersFromDB() {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "SELECT id,first_name,second_name,last_name,birthday,gender,inn,postcode,country,area,city,street,house,flat FROM USERS_DATA.USERS JOIN USERS_DATA.ADDRESS");
+                     "SELECT id,first_name,second_name,last_name,birthday,gender,inn,postcode,country,area,city,street,house,flat FROM USERS_DATA.USERS JOIN USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.id");
              ResultSet resultSet = statement.executeQuery()) {
 
             List<User> users = new ArrayList<>();
-
             while (resultSet.next()) {
-//                int uId = resultSet.getInt(1);
                 String first_name = resultSet.getString(2);
                 String second_name = resultSet.getString(3);
                 String last_name = resultSet.getString(4);
@@ -71,8 +71,23 @@ public class UserDB implements IUserDB {
         }
         return null;
     }
-// мне не понятно почему он здесь хочет return
 
+    @Override
+    public void addUsersToDB(List<User> users) {
+        for (User user : users) {
+            List<User> usersByFNSNandP = Collections.singletonList(getUserByName(
+                    user.getFirstName(),
+                    user.getSecondName(),
+                    user.getLastName()));
+            if (usersByFNSNandP.isEmpty()) {
+                addUser(user);
+                addAddress(user);
+            } else {
+                updateUser(user);
+                updateAddress(user);
+            }
+        }
+    }
 
     @Override
     public void addUser(User user) {
@@ -107,32 +122,32 @@ public class UserDB implements IUserDB {
         }
     }
 
-//теперь вот не ясно нужен ли вообще этот метод
     @Override
     public User getUserByName(String first_name, String second_name, String last_name) {
 
         List<User> users = getUsersFromDB();
-        for (User user : users) {
-            if (user.getFirstName().equals(first_name) && user.getSecondName().equals(second_name) && user.getLastName().equals(last_name)) {
-                return user;
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                if (user.getFirstName().equals(first_name) && user.getSecondName().equals(second_name) && user.getLastName().equals(last_name)) {
+                    return user;
+                }
             }
-        }
-        return null;
+        } return null;
     }
 
     @Override
     public boolean updateUser(User user) {
         boolean userUpdated = false;
         try (Connection connection = getConnection();
-        Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-        ResultSet result = getUsers.executeQuery("SELECT * FROM USERS_DATA.USERS")) {
+             Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+             ResultSet result = getUsers.executeQuery("SELECT * FROM USERS_DATA.USERS")) {
             while (result.next()) {
                 String firstName = result.getString("first_name");
                 String secondName = result.getString("second_name");
                 String lastName = result.getString("last_name");
 
                 //интересно, так тоже можно?
-                if (firstName == user.getFirstName() && secondName == user.getSecondName() && lastName == user.getLastName()) {
+                if (firstName.equals(user.getFirstName()) && secondName.equals(user.getSecondName()) && lastName.equals(user.getLastName())) {
                     result.updateDate("birthday", (Date) user.getDateOfBirth());
                     result.updateString("inn", user.getiNN());
                     result.updateRow();
@@ -147,16 +162,18 @@ public class UserDB implements IUserDB {
         return userUpdated;
     }
 
+    @Override
     public boolean updateAddress(User user) {
         boolean userUpdated = false;
         try (Connection connection = getConnection();
-        Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-        ResultSet result = getUsers.executeQuery("SELECT * FROM USERS_DATA.USERS JOINS USERS_DATA.ADDRESS")) {
+             Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+             ResultSet result = getUsers.executeQuery(
+                     "SELECT * FROM USERS_DATA.USERS JOINS USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.id")) {
             while (result.next()) {
                 String firstName = result.getString("first_name");
                 String secondName = result.getString("second_name");
                 String lastName = result.getString("last_name");
-                if (firstName == user.getFirstName() && secondName == user.getSecondName() && lastName == user.getLastName()) {
+                if (firstName.equals(user.getFirstName()) && secondName.equals(user.getSecondName()) && lastName.equals(user.getLastName())) {
                     result.updateInt("postcode", user.getZipcode());
                     result.updateString("country", user.getCountry());
                     result.updateString("area", user.getArea());

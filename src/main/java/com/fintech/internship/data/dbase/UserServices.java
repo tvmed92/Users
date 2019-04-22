@@ -2,24 +2,15 @@ package com.fintech.internship.data.dbase;
 
 import com.fintech.internship.data.pojo.User;
 
-import java.util.Collections;
 import java.util.List;
 
 public class UserServices {
 
     private static IUserDB userDB = new UserDB();
 
-
-    public void addUsersToDB (List<User> users){
-        for (User user : users){
-            List<User> usersByFNSNandP = Collections.singletonList(getUserByName(user.getFirstName(), user.getSecondName(), user.getLastName()));
-            if(usersByFNSNandP.isEmpty()){
-                addUser(user);
-                addAddress(user);
-            }else {
-                updateUser(user);
-                updateAddress(user);
-            }
+    public static void addUsersToDB(List<User> users) {
+        if (users != null) {
+            userDB.addUsersToDB(users);
         }
     }
 
@@ -47,7 +38,11 @@ public class UserServices {
         }
     }
 
-    public static List<User> getUsersFromDB() { return userDB.getUsersFromDB(); }
+    public static List<User> getUsersFromDB() {
+        return userDB.getUsersFromDB();
+    }
 
-    public static User getUserByName(String firstName, String secondName, String lastName, String name) { return userDB.getUserByName(name); }
+    public static User getUserByName(String firstName, String secondName, String lastName) {
+        return userDB.getUserByName(firstName, secondName, lastName);
+    }
 }
