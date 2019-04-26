@@ -2,34 +2,36 @@ package com.fintech.internship.data.dbase;
 
 import com.fintech.internship.data.pojo.User;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
 
 public class UserDB implements IUserDB {
 
     static Connection getConnection() throws IOException, SQLException {
 
-//        Properties dbProperties = new Properties();
-////        dbProperties.load(UserDB.class.getResourceAsStream("dbProperties"));
+        Properties dbProperties = new Properties();
+        FileInputStream fileIS = new FileInputStream("db.Properties");
 
-        String url = "jdbc:mysql:tcp://localhost:3306";
-//        try {
-//            Connection connection = DriverManager.getConnection(url, "admin", "admin");
-//            DriverManager.getConnection(dbProperties.getProperty("instance"), dbProperties);
-//        } catch (SQLException e) {
-//            e.getMessage();
-//        }
-        return DriverManager.getConnection(url, "admin", "admin");
+        dbProperties.load(fileIS);
+        String url = dbProperties.getProperty("url");
+        String username = dbProperties.getProperty("username");
+        String password = dbProperties.getProperty("password");
+
+        Connection connection = DriverManager.getConnection(url, username, password);
+
+        connection.close();
+
+        return null;
     }
 
     @Override
     public List<User> getUsersFromDB() {
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "SELECT id,first_name,second_name,last_name,birthday,gender,inn,postcode,country,area,city,street,house,flat FROM USERS_DATA.USERS JOIN USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.id");
+             PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
+                     "SELECT id,first_name,second_name,last_name,birthday,gender,inn,postcode,country,area,city,street,house,flat FROM USERS_DATA.USERS JOIN USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.address_id");
              ResultSet resultSet = statement.executeQuery()) {
 
             List<User> users = new ArrayList<>();
@@ -92,7 +94,7 @@ public class UserDB implements IUserDB {
     @Override
     public void addUser(User user) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                     "INSERT INTO USERS_DATA.USERS (first_name,second_name,last_name,birthday,gender,inn) VALUES (?,?,?,?,?,?); SELECT LAST_INSERT_ID();");
             statement.setString(1, user.getFirstName());
             statement.setString(2, user.getSecondName());
@@ -108,7 +110,7 @@ public class UserDB implements IUserDB {
     @Override
     public void addAddress(User user) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement(
+            PreparedStatement statement = Objects.requireNonNull(connection).prepareStatement(
                     "INSERT INTO USERS_DATA.ADDRESS (postcode,country,area,city,street,house,flat) VALUES (?,?,?,?,?,?,?); SELECT LAST_INSERT_ID();");
             statement.setInt(1, user.getZipcode());
             statement.setString(2, user.getCountry());
@@ -139,14 +141,13 @@ public class UserDB implements IUserDB {
     public boolean updateUser(User user) {
         boolean userUpdated = false;
         try (Connection connection = getConnection();
-             Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+             Statement getUsers = Objects.requireNonNull(connection).createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
              ResultSet result = getUsers.executeQuery("SELECT * FROM USERS_DATA.USERS")) {
             while (result.next()) {
                 String firstName = result.getString("first_name");
                 String secondName = result.getString("second_name");
                 String lastName = result.getString("last_name");
 
-                //интересно, так тоже можно?
                 if (firstName.equals(user.getFirstName()) && secondName.equals(user.getSecondName()) && lastName.equals(user.getLastName())) {
                     result.updateDate("birthday", (Date) user.getDateOfBirth());
                     result.updateString("inn", user.getiNN());
@@ -166,9 +167,9 @@ public class UserDB implements IUserDB {
     public boolean updateAddress(User user) {
         boolean userUpdated = false;
         try (Connection connection = getConnection();
-             Statement getUsers = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+             Statement getUsers = Objects.requireNonNull(connection).createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
              ResultSet result = getUsers.executeQuery(
-                     "SELECT * FROM USERS_DATA.USERS JOINS USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.id")) {
+                     "SELECT * FROM USERS_DATA.USERS JOINS USERS_DATA.ADDRESS ON users_data.address.id = users_data.users.address_id")) {
             while (result.next()) {
                 String firstName = result.getString("first_name");
                 String secondName = result.getString("second_name");
