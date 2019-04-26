@@ -1,13 +1,12 @@
 package com.fintech.internship.output;
 
-import com.fintech.internship.data.User;
+import com.fintech.internship.data.pojo.User;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.Format;
@@ -15,7 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class CreatePDF {
+import static com.fintech.internship.data.helpers.ConstantsUtil.columns;
+
+public class PDFCreator {
 
     private List<User> users;
     private Format format;
@@ -23,30 +24,25 @@ public class CreatePDF {
     private Font cellFont;
     private PdfPTable table;
 
-    public CreatePDF(List<User> userList) {
+    public PDFCreator(List<User> userList) {
         this.users = userList;
         this.format = new SimpleDateFormat("dd-MM-yyyy");
     }
 
 
-    private void setFont() {
-        BaseFont baseFont = null;
-        try {
-            baseFont = BaseFont.createFont(
-                    "src/main/resources/InconsolataCyr.ttf",
-                    BaseFont.IDENTITY_H,
-                    BaseFont.EMBEDDED);
-        } catch (DocumentException | IOException e) {
-            e.printStackTrace();
-        }
+    private void setFont() throws IOException, DocumentException {
+        BaseFont baseFont;
+        baseFont = BaseFont.createFont(this.getClass()
+                        .getClassLoader()
+                        .getResource("InconsolataCyr.ttf").getPath(),
+                BaseFont.IDENTITY_H,
+                BaseFont.EMBEDDED);
         headerFont = new Font(baseFont, 12, Font.NORMAL);
         cellFont = new Font(baseFont, 10, Font.NORMAL);
     }
 
     private void addTableHeader(PdfPTable table) {
-        Stream.of("Имя", "Отчество", "Фамилия", "Возраст",
-                "Пол", "Дата рождения", "ИНН", "Почтовый индекс", "Страна",
-                "Область", "Город", "Улица", "Дом", "Квартира")
+        Stream.of(columns)
                 .forEach(columnTitle -> {
                     PdfPCell header = new PdfPCell();
                     header.setBackgroundColor(BaseColor.LIGHT_GRAY);
@@ -85,36 +81,28 @@ public class CreatePDF {
     }
 
     public void createFile(String dest) {
-
         Document document = new Document(PageSize.A3,
                 0, 0, 0, 0);
         try {
             PdfWriter.getInstance(document, new FileOutputStream(dest));
-        } catch (DocumentException | FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
-        document.open();
-        setFont();
+            document.open();
+            setFont();
 
-        table = new PdfPTable(14);
-        table.setWidthPercentage(100);
-        table.setSpacingBefore(0f);
-        table.setSpacingAfter(0f);
-        try {
+            table = new PdfPTable(14);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(0f);
+            table.setSpacingAfter(0f);
             table.setWidths(new float[]{1.0f, 1.2f, 1.0f, 0.8f, 0.4f, 0.9f,
                     1.0f, 0.9f, 1.2f, 1.3f, 1.3f, 0.9f, 0.5f, 0.9f});
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-        addTableHeader(table);
-        addRows(users);
+            addTableHeader(table);
+            addRows(users);
 
-        try {
             document.add(table);
-        } catch (DocumentException e) {
-            e.printStackTrace();
+        } catch (IOException | DocumentException e) {
+            throw new RuntimeException(e.getMessage());
+        } finally {
+            document.close();
         }
-        document.close();
     }
 }

@@ -1,0 +1,27 @@
+CREATE SCHEMA IF NOT EXISTS users_data DEFAULT CHARACTER SET utf8;
+USE users_data;
+
+CREATE TABLE IF NOT EXISTS users_data.address (
+id INT AUTO_INCREMENT NOT NULL,
+postcode VARCHAR(256),
+country VARCHAR(256),
+area VARCHAR(256),
+city VARCHAR(256),
+street VARCHAR(256),
+house INT,
+flat INT,
+PRIMARY KEY (id));
+
+CREATE TABLE IF NOT EXISTS users_data.users (
+id INT AUTO_INCREMENT NOT NULL,
+first_name VARCHAR(256),
+second_name VARCHAR(256),
+last_name VARCHAR(256),
+birthday DATE,
+gender VARCHAR(1),
+inn VARCHAR(12),
+address_id INT NOT NULL,
+FOREIGN KEY (address_id)
+REFERENCES address(id),
+PRIMARY KEY (id) );
+
